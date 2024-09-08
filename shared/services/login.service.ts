@@ -66,7 +66,7 @@ export class LoginService implements OnDestroy {
   }
 
   autoLogin() {
-    return from(Preferences.get({ key: 'promoforceAuthData' })).pipe(
+    return from(Preferences.get({ key: 'company' })).pipe(
       map((storedData) => {
         if (!storedData || !storedData.value) {
           return null;
@@ -92,7 +92,7 @@ export class LoginService implements OnDestroy {
 
   logout() {
 
-    Preferences.remove({ key: 'promoforceAuthData' })
+    Preferences.remove({ key: 'company' })
       .then(() => {
         if (this.activeLogoutTimer) {
           clearTimeout(this.activeLogoutTimer);
@@ -110,7 +110,7 @@ export class LoginService implements OnDestroy {
 
   storeAuthData(userModel: UserModel) {
     Preferences.set({
-      key: 'promoforceAuthData',
+      key: 'company',
       value: JSON.stringify(userModel),
     });
   }
