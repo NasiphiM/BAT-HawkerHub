@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
-import { PromoforceHeaderComponent } from './promoforce-header/promoforce-header.component';
+
 
 @NgModule({
   imports: [
@@ -17,11 +17,9 @@ import { PromoforceHeaderComponent } from './promoforce-header/promoforce-header
     DirectivesModule
   ],
   declarations: [
-    PromoforceHeaderComponent,
     ShowHidePasswordComponent,
   ],
   exports: [
-    PromoforceHeaderComponent,
     ShowHidePasswordComponent,
   ],
 })
