@@ -1,0 +1,287 @@
+<ng-container
+  *ngIf="
+              question?.questionTypeID === questionTypes.textList ||
+                question?.questionTypeID === questionTypes.numberList ||
+                question?.questionTypeID === questionTypes.percentList;
+              else nonList
+            "
+>
+  <ng-container [ngSwitch]="question?.questionTypeID">
+    <ng-container
+      *ngSwitchCase="questionTypes.percentList"
+    >
+      <ion-list>
+        <ion-item-divider>
+          <ion-label class="ion-text-wrap">{{
+              question?.question
+            }}
+          </ion-label>
+        </ion-item-divider>
+        <ng-container *ngFor="let item of question?.answers">
+          <ion-item>
+            <ion-label class="ion-text-wrap" position="floating">{{
+                item?.answerOption
+              }}
+            </ion-label>
+            <ion-input
+              type="number"
+              [required]="!question?.mandatoryInd"
+              ngModel
+              [name]="
+                          'listCtrlPercent' +
+                          question?.questionnaireQuestionID.toString() +
+                          item?.questionnaireQuestionAnswerOptionID.toString()
+                        "
+              #listCtrlPercent="ngModel"
+              (ionChange)="checkValidity($event)"
+              [(ngModel)]="item.inputAnswer"
+              value="0"
+              placeholder="%"
+            ></ion-input>
+          </ion-item>
+          <ion-item
+            *ngIf="
+                        findNgModel(
+                          'listCtrlPercent' +
+                            question?.questionnaireQuestionID.toString() +
+                            item?.questionnaireQuestionAnswerOptionID.toString()
+                        )?.errors?.required &&
+                        findNgModel(
+                          'listCtrlPercent' +
+                            question?.questionnaireQuestionID.toString() +
+                            item?.questionnaireQuestionAnswerOptionID.toString()
+                        )?.touched
+                      "
+            lines="none"
+          >
+            <ion-label class="ion-text-wrap" color="danger"
+            ><h6>
+              {{ item?.answerOption.replace(':', '') }} is required
+            </h6></ion-label
+            >
+          </ion-item>
+          <ion-item
+            *ngIf="
+                        findNgModel(
+                          'listCtrlPercent' +
+                            question?.questionnaireQuestionID.toString() +
+                            item?.questionnaireQuestionAnswerOptionID.toString()
+                        )?.errors?.hundredPercent &&
+                        findNgModel(
+                          'listCtrlPercent' +
+                            question?.questionnaireQuestionID.toString() +
+                            item?.questionnaireQuestionAnswerOptionID.toString()
+                        )?.touched
+                      "
+            lines="none"
+          >
+            <ion-label class="ion-text-wrap" color="danger"
+            ><h6>
+              {{
+                findNgModel(
+                  'listCtrlPercent' +
+                  question?.questionnaireQuestionID.toString() +
+                  item?.questionnaireQuestionAnswerOptionID.toString()
+                )?.errors?.hundredPercent
+              }}
+            </h6></ion-label
+            >
+          </ion-item>
+        </ng-container>
+      </ion-list>
+    </ng-container>
+
+    <ion-list
+      *ngIf="question?.questionTypeID !== questionTypes.percentList"
+    >
+      <ion-item-divider>
+        <ion-label class="ion-text-wrap">{{
+            question?.question
+          }}
+        </ion-label>
+      </ion-item-divider>
+
+      <ng-container *ngFor="let item of question?.answers">
+        <ion-item>
+          <ion-label class="ion-text-wrap" position="floating">{{
+              item?.answerOption
+            }}
+          </ion-label>
+          <ion-input
+            *ngSwitchCase="questionTypes.textList"
+            type="text"
+            maxlength="50"
+            [required]="question?.mandatoryInd"
+            ngModel
+            [name]="
+                        'listCtrl' + item?.questionnaireQuestionAnswerOptionID
+                      "
+            #listCtrl="ngModel"
+            (ionChange)="checkValidity($event)"
+            [(ngModel)]="item.inputAnswer"
+          ></ion-input>
+
+          <ion-input
+            *ngSwitchCase="questionTypes.numberList"
+            type="number"
+            [required]="question?.mandatoryInd"
+            ngModel
+            [name]="
+                        'listCtrl' + item?.questionnaireQuestionAnswerOptionID
+                      "
+            #listCtrl="ngModel"
+            (ionChange)="checkValidity($event)"
+            [(ngModel)]="item.inputAnswer"
+          ></ion-input>
+        </ion-item>
+        <ion-item
+          *ngIf="
+                      findNgModel(
+                        'listCtrl' + item?.questionnaireQuestionAnswerOptionID
+                      )?.errors?.required &&
+                      findNgModel(
+                        'listCtrl' + item?.questionnaireQuestionAnswerOptionID
+                      )?.touched
+                    "
+          lines="none"
+        >
+          <ion-label class="ion-text-wrap" color="danger"
+          ><h6>
+            {{ item?.answerOption.replace(':', '') }} is required
+          </h6></ion-label
+          >
+        </ion-item>
+      </ng-container>
+    </ion-list>
+  </ng-container>
+</ng-container>
+
+<ng-template #nonList>
+  <ng-container [ngSwitch]="question?.questionTypeID">
+    <ion-grid *ngIf="question?.questionTypeID !== questionTypes.numberNormal">
+      <ion-row style="padding-bottom: 5px;"> {{ question?.question }}</ion-row>
+      <ion-row class="ion-align-items-center" style="border-bottom: 1px solid #8c8c8c; padding-bottom: 10px;">
+        <ion-radio-group
+          *ngSwitchCase="
+                    question?.questionTypeID === questionTypes.dropdown ||
+                    question?.questionTypeID === questionTypes.radioButton
+                      ? question?.questionTypeID
+                      : ''
+                  "
+          [required]="question?.mandatoryInd"
+          ngModel
+          [name]="'nonListCtrl' + question?.questionnaireQuestionID"
+          #nonListCtrl="ngModel"
+          (ionChange)="checkValidity($event)"
+          [(ngModel)]="question.singleSelectedAnswer"
+          style="width:100%"
+        >
+          <ion-row>
+            <ion-col *ngFor="let item of question?.answers" class="ion-text-center" size="6" offset="0">
+              <div style="display: flex; flex-direction: row; width:100%;">
+                <ion-item lines="none">
+                  <ion-radio [value]="item" mode="md"></ion-radio>
+                  <ion-label style="width:fit-content; margin-left: 5px;" class="ion-text-wrap">{{ item.answerOption }}</ion-label>
+                </ion-item>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-radio-group>
+
+        <ion-input
+          [(ngModel)]="question.inputAnswer"
+          *ngSwitchCase="questionTypes.smallText"
+          type="text"
+          ngModel
+          [name]="'nonListCtrl' + question?.questionnaireQuestionID"
+          #nonListCtrl="ngModel"
+          maxlength="50"
+          [required]="question?.mandatoryInd"
+          (ionChange)="checkValidity($event)"
+          [appNotEmptyValidator]="question?.mandatoryInd"
+        >
+        </ion-input>
+
+        <ion-textarea
+          [(ngModel)]="question.inputAnswer"
+          *ngSwitchCase="questionTypes.bigText"
+          ngModel
+          [name]="'nonListCtrl' + question?.questionnaireQuestionID"
+          #nonListCtrl="ngModel"
+          [required]="question?.mandatoryInd && question?.question.trim() != 'Hawker Name'"
+          [appNotEmptyValidator]="question?.mandatoryInd"
+          (ionChange)="checkValidity($event)"
+          maxlength="500"
+          auto-grow="true"
+        >
+          <ion-text *ngIf="question?.question === 'Hawker Name'">{{ scanResult }}</ion-text>
+        </ion-textarea>
+        <ng-container *ngIf="question?.question === 'Hawker Name'">
+          <ion-button
+            size="small"
+            fill="outline"
+            (click)="startScan(question)"
+          >Scan
+          </ion-button>
+
+          <ion-button
+            *ngIf="scanResult"
+            size="small"
+            fill="outline"
+            (click)="reset()"
+          >Reset
+          </ion-button>
+
+          <video #video [hidden]="!scanActive" width="100%"></video>
+          <canvas #canvas hidden></canvas>
+
+          <ion-button
+            *ngIf="scanActive"
+            size="small"
+            fill="outline"
+            color="danger"
+            (click)="stopScan()"
+          >Stop
+          </ion-button>
+        </ng-container>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid *ngIf="question?.questionTypeID === questionTypes.numberNormal">
+      <ion-row>
+        <ion-col size="8">{{ question?.question }}</ion-col>
+        <ion-col size="2">
+          <ion-input
+            style="border: 1px solid #8c8c8c; border-radius: 2px"
+            *ngSwitchCase="questionTypes.numberNormal"
+            [(ngModel)]="question.inputAnswer"
+            type="number"
+            ngModel
+            [name]="'nonListCtrl' + question?.questionnaireQuestionID"
+            #nonListCtrl="ngModel"
+            (ionChange)="checkValidity($event)"
+            [required]="question?.mandatoryInd"
+          ></ion-input>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-item
+      *ngIf="
+                  (
+                    findNgModel('nonListCtrl' + question?.questionnaireQuestionID)
+                      ?.errors?.required ||
+                    findNgModel('nonListCtrl' + question?.questionnaireQuestionID)
+                      ?.errors?.isEmpty
+                  ) &&
+                  findNgModel('nonListCtrl' + question?.questionnaireQuestionID)
+                    ?.touched
+                "
+      lines="none"
+    >
+      <ion-label class="ion-text-wrap" color="danger">
+        <h6> *This question is required </h6></ion-label
+      >
+    </ion-item>
+  </ng-container>
+</ng-template>

@@ -1,0 +1,12 @@
+<ion-toolbar color="primary" class="ion-text-center">
+  <ion-title>{{title}}</ion-title>
+  <ion-buttons icon-only slot="start">
+    <ion-back-button *ngIf="backButtonDefaultHref && !isModal"  defaultHref={{backButtonDefaultHref}}></ion-back-button>
+  </ion-buttons>
+  <ion-buttons icon-only slot="start">
+    <ion-back-button *ngIf="isModal" (click)="closeModal() " defaultHref=""></ion-back-button>
+  </ion-buttons>
+  <ion-buttons slot="end">
+    <ion-button *ngIf="isLogout" (click)="onLogout()"><ion-icon name="log-out"></ion-icon></ion-button>
+  </ion-buttons>
+</ion-toolbar>

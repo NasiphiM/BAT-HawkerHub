@@ -1,0 +1,16 @@
+ion-tab-bar {
+  overflow: auto;
+}
+
+@font-face {
+  font-family: "earth-orbiter";
+  src: local("earth-orbiter"),
+  url(../assets/fonts/Earth-Orbiter/earthorbiter.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "notoSans";
+  src: local("notoSans"),
+  url(../assets/fonts/NotoSans-hinted/NotoSans-Regular.ttf) format("truetype");
+}
+

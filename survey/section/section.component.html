@@ -1,0 +1,22 @@
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <h1>{{section.questionnaireSection}}</h1>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col
+      *ngFor="let q of section.questions; let i=index;"
+      size="12"
+      >
+      <app-question *ngIf="!q.question.startsWith('!')"
+                    [question]="q"
+                    [touched]="touched"
+                    (isValid)="onValidChange(i, $event)"
+                    (answers)="onAnswered(i, $event)"
+                    [listCtrls]="listCtrls"
+                    [listCtrlPercents]="listCtrlPercents"
+                    [nonListCtrls]="nonListCtrls"></app-question>
+    </ion-col>
+  </ion-row>
+</ion-grid>
